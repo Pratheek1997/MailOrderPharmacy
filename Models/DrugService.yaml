@@ -1,0 +1,33 @@
+piVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drugserdeploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: DrugMicroservice
+  template:
+    metadata:
+      labels:
+        app: DrugMicroservice
+    spec:
+      containers:
+      - name: drugrepos
+        image: mailorderpharmacy.azurecr.io/drugrepos:latest
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: asconfigsn
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: DrugMicroservice
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: DrugMicroservice
